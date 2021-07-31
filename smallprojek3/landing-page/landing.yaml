@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: landing-page
+  labels:
+    env: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      env: v1
+  template:
+    metadata:
+      name: landing-page
+      labels:
+        env: v1
+    spec:
+      containers:
+        - name: landing-page
+          image: indraraspati/p-landing-page:1.0 
+          ports:
+          - containerPort: 80
+         
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: landing-page
+spec:
+        #type: LoadBalancer
+  ports:
+    - port: 80
+      #nodePort: 30080
+  selector:
+    env: v1
+...

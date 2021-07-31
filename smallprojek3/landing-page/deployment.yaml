@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: landing-page
+  labels:
+    env: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      env: v1
+  template:
+    metadata:
+      name: landing-page
+      labels:
+        env: v1
+    spec:
+      containers:
+        - name: landing-page
+          image: 0der/landingpage
+          ports:
+          - containerPort: 80
+          # env:
+          #   - name: DB_USER
+          #    value: admin
+              #valueFrom:
+              # secretKeyRef:
+              #   name: secretpesbuk
+              #   key: DB_USER
+              #  - name: DB_PASS
+              #value: cilsy123
+              #valueFrom:
+              # secretKeyRef:
+              #   name: secretpesbuk
+              #   key: DB_PASS
+              #  - name: DB_HOST
+              #  value: testing12.carofewr13hh.us-east-2.rds.amazonaws.com
+              #valueFrom:
+              # secretKeyRef:
+              #   name: secretpesbuk
+              #   key: DB_HOST
+              # - name: DB_NAME
+              # value: pesbuk
+              #valueFrom:
+              # secretKeyRef:
+              #   name: secretpesbuk
+              #   key: DB_NAME  
+              #  volumeMounts:
+              #  - name: config-php
+              # mountPath: /srv/app/config.php
+              # subPath: config.php
+              #   volumes: 
+              #        - name: config-php
+              #    configMap:
+              #  name: p-fb-configmap
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: landing-page
+spec:
+        #type: LoadBalancer
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+      #nodePort: 30080
+  selector:
+    env: v1

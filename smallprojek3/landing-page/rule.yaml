@@ -1,0 +1,19 @@
+  
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: landing-page
+  annotations:
+    ## Untuk menaikan batas upload file
+    nginx.org/client-max-body-size: "10m"
+    ## Memaksa jalan di http
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  rules:
+  - host: landing.ibrahimsite.xyz
+    http:
+      paths:
+      #- path: /belajar
+      - backend:
+          serviceName: landing-page
+          servicePort: 80

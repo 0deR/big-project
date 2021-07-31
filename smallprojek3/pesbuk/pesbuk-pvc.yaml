@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pesbuk
+  labels:
+    env: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      env: v1
+  template:
+    metadata:
+      name: pesbuk
+      labels:
+        env: v1
+    spec:
+      containers:
+        - name: pesbuk
+          image: 0der/pesbukapache
+          ports:
+          - containerPort: 80
+          env:
+            - name: DB_USER
+              value: admin
+              #valueFrom:
+              # secretKeyRef:
+              #   name: secretpesbuk
+              #   key: DB_USER
+            - name: DB_PASS
+              value: cilsy123
+              #valueFrom:
+              # secretKeyRef:
+              #   name: secretpesbuk
+              #   key: DB_PASS
+            - name: DB_HOST
+              value: testing12.carofewr13hh.us-east-2.rds.amazonaws.com
+              #valueFrom:
+              # secretKeyRef:
+              #   name: secretpesbuk
+              #   key: DB_HOST
+            - name: DB_NAME
+              value: pesbuk
+              #valueFrom:
+              # secretKeyRef:
+              #   name: secretpesbuk
+              #   key: DB_NAME  
+          volumeMounts:
+            - mountPath: /srv/app
+              name: pesbuk-data
+              #  - name: config-php
+              # mountPath: /srv/app/config.php
+              #subPath: config.php
+      volumes: 
+      # - name: config-php
+      #    configMap:
+      #      name: p-fb-configmap
+        - name: pesbuk-data 
+          persistentVolumeClaim:
+            claimName: pesbuk-pvc          
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pesbuk
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      #nodePort: 30080
+  selector:
+    env: v1
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pesbuk-pvc
+spec:
+  storageClassName: generic
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+            storage: 5Gi
+---
